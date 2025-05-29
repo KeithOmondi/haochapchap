@@ -22,7 +22,7 @@ const ContactPage = () => {
           </div>
           <div className="flex items-center gap-4 mb-6">
             <FaEnvelope className="text-blue-900 text-xl" />
-            <span className="text-gray-700">contact@kianoptics.com</span>
+            <span className="text-gray-700">contact@haochapchap.com</span>
           </div>
           <div className="flex items-center gap-4 mb-6">
             <FaMapMarkerAlt className="text-blue-900 text-xl" />

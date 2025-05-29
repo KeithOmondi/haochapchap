@@ -17,6 +17,7 @@ import OrderDetailsPage from "../pages/OrderDetailsPage";
 import EventsPage from "../pages/EventsPage";
 import AppointmentForm from "../pages/AppointmentForm";
 import WhyUs from "../pages/WhyUs";
+import Careers from "../pages/Careers";
 
 export {
     HomePage,
@@ -37,5 +38,6 @@ export {
     OrderDetailsPage,
     EventsPage,
     AppointmentForm,
-    WhyUs
+    WhyUs,
+    Careers
 }

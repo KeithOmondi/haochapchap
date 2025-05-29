@@ -1,26 +1,40 @@
 // Nav Data for Eyeglasses Shop
 export const navData = [
-    {
-      title: "Home",
-      url: "/"
-    },
-    {
-      title: "Events",
-      url: "/events"
-    },
-    {
-      title: "Services",
-      url: "/services"
-    },
-    {
-      title: "Rent",
-      url: "/products"
-    },
-    {
-      title: "Company",
-      url: "/blue-light-glasses"
-    },
-  ];
+  {
+    title: "Home",
+    url: "/"
+  },
+  {
+    title: "Events",
+    url: "/events"
+  },
+  {
+    title: "Services",
+    url: "/services"
+  },
+  {
+    title: "Rent",
+    url: "/products"
+  },
+  {
+    title: "Company",
+    children: [
+      {
+        title: "About Us",
+        url: "/about"
+      },
+      {
+        title: "Careers",
+        url: "/career"
+      },
+      {
+        title: "Contact",
+        url: "/contact"
+      }
+    ]
+  }
+];
+
   
   
   // Categories Data for Eyeglasses Shop

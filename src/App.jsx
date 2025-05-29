@@ -23,6 +23,7 @@ import {
   Services,
   AppointmentForm,
   WhyUs,
+  Careers,
 } from "./routes/Routes";
 
 import {
@@ -79,6 +80,7 @@ const AppContent = () => {
         <Route path="/services" element={<Services />} />
         <Route path="/products" element={<ContactLenses />} />
         <Route path="/why-us" element={<WhyUs />} />
+        <Route path="/career" element={<Careers />} />
         <Route path="/blue-light-glasses" element={<BlueLight />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/appointment" element={<AppointmentForm />} />

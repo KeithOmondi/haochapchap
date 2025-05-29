@@ -1,86 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-  AiFillHeart,
-  AiOutlineHeart,
-  AiOutlineMessage,
-  AiOutlineShoppingCart,
-} from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  addToWishlist,
-  removeFromWishlist,
-} from "../../redux/actions/wishlist";
-import { addTocart } from "../../redux/actions/cart";
-import { toast } from "react-toastify";
 import Ratings from "./Ratings";
 import { getAllProductsShop } from "../../redux/actions/product";
-import { server } from "../../server";
-import axios from "axios";
-import ModelViewer from "./ModelViewer/ModelViewer";
 
 const ProductDetails = ({ data }) => {
-  const { wishlist } = useSelector((state) => state.wishlist);
-  const { cart } = useSelector((state) => state.cart);
-  const { user, isAuthenticated } = useSelector((state) => state.user);
-  const [count, setCount] = useState(1);
-  const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const wishlist = useSelector((state) => state.wishlist.wishlist);
 
   useEffect(() => {
-    dispatch(getAllProductsShop(data?.shop._id));
-    if (wishlist?.find((item) => item._id === data?._id)) {
-      setClick(true);
-    } else {
-      setClick(false);
+    if (data?.shop?._id) {
+      dispatch(getAllProductsShop(data.shop._id));
     }
-  }, [data, wishlist, dispatch]);
-
-  const incrementCount = () => setCount((prev) => prev + 1);
-  const decrementCount = () => count > 1 && setCount((prev) => prev - 1);
-
-  const handleWishlist = (data) => {
-    setClick(!click);
-    click ? dispatch(removeFromWishlist(data)) : dispatch(addToWishlist(data));
-  };
-
-  const handleAddToCart = () => {
-    const isItemExists = cart.find((item) => item._id === data._id);
-    if (isItemExists) {
-      toast.error("Item already in cart!");
-    } else {
-      if (data.stock < 1) {
-        toast.error("Product stock limited!");
-      } else {
-        const cartData = { ...data, qty: count };
-        dispatch(addTocart(cartData));
-        toast.success("Item added to cart successfully!");
-      }
-    }
-  };
-
-  const handleMessageSubmit = async () => {
-    if (isAuthenticated) {
-      const groupTitle = data._id + user._id;
-      try {
-        const res = await axios.post(
-          `${server}/conversation/create-new-conversation`,
-          {
-            groupTitle,
-            userId: user._id,
-            sellerId: data.shop._id,
-          }
-        );
-        navigate(`/inbox?${res.data.conversation._id}`);
-      } catch (error) {
-        toast.error(error.response.data.message);
-      }
-    } else {
-      toast.error("Please login to create a conversation");
-    }
-  };
+  }, [data?.shop?._id, dispatch]);
 
   const totalReviewsLength = data?.reviews.length || 0;
   const totalRatings =
@@ -90,85 +23,78 @@ const ProductDetails = ({ data }) => {
   return (
     <div className="bg-white">
       {data && (
-        <div className="max-w-[1200px] w-[90%] md:w-[80%] mx-auto">
-          <div className="py-5">
-            <div className="block md:flex">
-              <div className="w-full md:w-1/2">
-                {data?.modelUrl ? (
-                  <ModelViewer modelUrl={data.modelUrl} />
-                ) : (
+        <div className="max-w-[1200px] w-[90%] md:w-[80%] mx-auto py-5">
+          {/* Image and Description Stack */}
+          <div className="flex flex-col gap-6">
+            {/* Main Image and Thumbnails */}
+            <div>
+              <img
+                src={data.images[select]?.url}
+                alt={data.name}
+                className="w-full rounded-md object-cover"
+              />
+              <div className="flex flex-wrap gap-2 mt-3">
+                {data.images.map((image, index) => (
                   <img
-                    src={data.images[select]?.url}
-                    alt=""
-                    className="object-cover rounded-md"
+                    key={index}
+                    src={image.url}
+                    alt={`thumbnail-${index}`}
+                    onClick={() => setSelect(index)}
+                    className={`h-[100px] object-cover rounded-md cursor-pointer border ${
+                      select === index ? "border-blue-500" : "border-gray-200"
+                    }`}
                   />
-                )}
-                <div className="flex flex-wrap">
-                  {data.images.map((image, index) => (
-                    <div
-                      key={index}
-                      className={`cursor-pointer ${
-                        select === index ? " w-[50%] object-contain" : ""
-                      }`}
-                      onClick={() => setSelect(index)}
-                    >
-                      <img
-                        src={image?.url}
-                        alt=""
-                        className="h-[200px] object-cover mr-3 mt-3 rounded-md"
-                      />
-                    </div>
-                  ))}
+                ))}
+              </div>
+            </div>
+
+            {/* Product Information */}
+            <div>
+              <h1 className="text-2xl font-bold text-gray-800">{data.name}</h1>
+              <p className="text-gray-700 leading-7 mt-2">{data.description}</p>
+
+              {data.details && data.details.length > 0 && (
+                <div className="mt-4">
+                  <h4 className="text-lg font-semibold mb-2">More Details:</h4>
+                  <ul className="list-disc pl-5 text-gray-700 space-y-1">
+                    {data.details.map((detail, idx) => (
+                      <li key={idx}>{detail}</li>
+                    ))}
+                  </ul>
                 </div>
+              )}
+
+              {/* Price */}
+              <div className="flex items-center gap-4 mt-5">
+                <h4 className="text-xl text-red-600 font-semibold">
+                  Ksh. {data.discountPrice}
+                </h4>
+                {data.originalPrice && (
+                  <span className="line-through text-gray-500">
+                    Ksh. {data.originalPrice}
+                  </span>
+                )}
               </div>
 
-              <div className="w-full md:w-1/2 pt-5">
-                <h1 className="text-2xl font-semibold">{data.name}</h1>
-                <p className="mt-2">{data.description}</p>
-                <div className="flex items-center gap-4 pt-3">
-                  <h4 className="text-xl font-bold text-red-600">
-                    Ksh. {data.discountPrice}
-                  </h4>
-                  {data.originalPrice && (
-                    <h3 className="text-lg line-through text-gray-500">
-                      {data.originalPrice}Ksh
-                    </h3>
-                  )}
-                </div>
-
-                
-
-                
-
-                <div className="flex items-center pt-8">
-                  <div className={`${data.shop._id}`}>
-                    <img
-                      src={data.shop?.avatar?.url}
-                      alt=""
-                      className="w-[50px] h-[50px] rounded-full mr-2"
-                    />
-                  </div>
-                  <div className="pr-8">
-                    <div>
-                      <h3 className="text-lg font-semibold">
-                        {data.shop.name}
-                      </h3>
-                    </div>
-                    <div className="flex">
-                      <Ratings rating={data?.ratings} />
-                    </div>
-                    <h5 className="text-sm text-gray-600">
-                      ({averageRating}/5) Ratings
-                    </h5>
-                  </div>
-
-                  
-                  
+              {/* Shop Info */}
+              <div className="flex items-center gap-4 mt-8">
+                <img
+                  src={data.shop?.avatar?.url}
+                  alt="Shop"
+                  className="w-[50px] h-[50px] rounded-full object-cover"
+                />
+                <div>
+                  <h3 className="text-lg font-semibold">{data.shop.name}</h3>
+                  <Ratings rating={data?.ratings} />
+                  <p className="text-sm text-gray-600">
+                    ({averageRating}/5) Ratings
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Tabs Section */}
           <ProductDetailsInfo
             data={data}
             averageRating={averageRating}
@@ -184,92 +110,89 @@ const ProductDetailsInfo = ({ data, averageRating, totalReviewsLength }) => {
   const [active, setActive] = useState(1);
 
   return (
-    <div className="bg-gray-100 px-4 md:px-10 py-6 rounded mt-8">
-      <div className="flex justify-between border-b mb-6">
-        {["Details", "Reviews", "Agent Information"].map(
-          (tab, index) => (
-            <div key={index} className="relative">
-              <h5
-                className="text-black text-lg font-semibold cursor-pointer"
-                onClick={() => setActive(index + 1)}
-              >
-                {tab}
-              </h5>
-              {active === index + 1 && (
-                <div className="h-1 bg-black w-full mt-1" />
-              )}
-            </div>
-          )
-        )}
+    <div className="bg-gray-100 mt-10 p-6 rounded">
+      <div className="flex justify-between border-b pb-3 mb-5">
+        {["Details", "Reviews", "Agent Information"].map((tab, index) => (
+          <div key={index} className="relative">
+            <button
+              onClick={() => setActive(index + 1)}
+              className={`text-md font-semibold ${
+                active === index + 1 ? "text-black" : "text-gray-500"
+              }`}
+            >
+              {tab}
+            </button>
+            {active === index + 1 && (
+              <div className="h-1 bg-black w-full mt-1" />
+            )}
+          </div>
+        ))}
       </div>
 
+      {/* Tab Content */}
       {active === 1 && (
-        <p className="text-lg leading-7 whitespace-pre-line">
+        <p className="text-gray-800 leading-7 whitespace-pre-line">
           {data.description}
         </p>
       )}
+
       {active === 2 && (
-        <div className="min-h-[40vh] flex flex-col items-center gap-4">
-          {data.reviews.length ? (
-            data.reviews.map((item, index) => (
-              <div key={index} className="flex items-start gap-3">
+        <div className="space-y-5">
+          {data.reviews.length > 0 ? (
+            data.reviews.map((review, index) => (
+              <div key={index} className="flex gap-3">
                 <img
-                  src={`${item.user?.avatar?.url}`}
-                  alt=""
+                  src={review.user?.avatar?.url}
+                  alt="Reviewer"
                   className="w-[50px] h-[50px] rounded-full object-cover"
                 />
                 <div>
                   <div className="flex items-center gap-2">
-                    <h1 className="font-medium">{item.user.name}</h1>
-                    <Ratings rating={item.rating} />
+                    <h4 className="font-semibold">{review.user.name}</h4>
+                    <Ratings rating={review.rating} />
                   </div>
-                  <p>{item.comment}</p>
+                  <p className="text-gray-700">{review.comment}</p>
                 </div>
               </div>
             ))
           ) : (
-            <h5>No reviews available for this product!</h5>
+            <p className="text-gray-600">No reviews yet for this product.</p>
           )}
         </div>
       )}
+
       {active === 3 && (
-        <div className="block md:flex gap-8">
-          <div className="flex-1">
-            <div className={`${data.shop._id}`}>
-              <div className="flex items-center gap-3">
-                <img
-                  src={`${data?.shop?.avatar?.url}`}
-                  alt=""
-                  className="w-[50px] h-[50px] rounded-full object-cover"
-                />
-                <div>
-                  <h3 className="text-lg font-semibold">{data.shop.name}</h3>
-                  <h5 className="text-sm text-gray-600">
-                    ({averageRating}/5) Ratings
-                  </h5>
-                </div>
-              </div>
+        <div className="block md:flex justify-between">
+          <div className="flex items-start gap-3">
+            <img
+              src={data.shop?.avatar?.url}
+              alt="Agent"
+              className="w-[60px] h-[60px] rounded-full object-cover"
+            />
+            <div>
+              <h4 className="font-semibold text-lg">{data.shop.name}</h4>
+              <p className="text-sm text-gray-600">
+                ({averageRating}/5) Ratings
+              </p>
+              <p className="pt-2 text-gray-700">{data.shop.description}</p>
             </div>
-            <p className="pt-3">{data.shop.description}</p>
           </div>
 
-          <div className="flex-1 mt-5 md:mt-0 md:items-end text-right">
-            <h5 className="font-semibold">
-              Joined on:{" "}
-              <span className="font-normal">
-                {data.shop.createdAt?.slice(0, 10)}
-              </span>
-            </h5>
-            <h5 className="font-semibold pt-3">
-              Total Products:{" "}
-              <span className="font-normal">{data.shop.totalProducts}</span>
-            </h5>
-            <h5 className="font-semibold pt-3">
-              Total Reviews:{" "}
-              <span className="font-normal">{totalReviewsLength}</span>
-            </h5>
+          <div className="text-right mt-5 md:mt-0">
+            <p>
+              <span className="font-medium">Joined:</span>{" "}
+              {data.shop.createdAt?.slice(0, 10)}
+            </p>
+            <p className="mt-1">
+              <span className="font-medium">Total Products:</span>{" "}
+              {data.shop.totalProducts}
+            </p>
+            <p className="mt-1">
+              <span className="font-medium">Total Reviews:</span>{" "}
+              {totalReviewsLength}
+            </p>
             <Link to="/">
-              <button className="bg-black text-white px-6 py-2 rounded mt-4 hover:opacity-90 transition">
+              <button className="bg-black text-white px-6 py-2 rounded mt-4 hover:opacity-90">
                 Visit Shop
               </button>
             </Link>

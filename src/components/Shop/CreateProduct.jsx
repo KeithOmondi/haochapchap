@@ -15,6 +15,7 @@ const CreateProduct = () => {
   const [images, setImages] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [features, setFeatures] = useState([""]); // <-- Added features state
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
   const [location, setLocation] = useState("");
@@ -29,9 +30,10 @@ const CreateProduct = () => {
     if (success) {
       toast.success("Product created successfully!");
       navigate("/dashboard");
-      // Optional: Reset form
+      // Reset form
       setName("");
       setDescription("");
+      setFeatures([""]); // reset features
       setCategory("");
       setTags("");
       setLocation("");
@@ -76,6 +78,7 @@ const CreateProduct = () => {
     const productData = {
       name,
       description,
+      details: features.filter((f) => f.trim() !== ""), // send non-empty features as details
       category,
       tags,
       location,
@@ -92,7 +95,7 @@ const CreateProduct = () => {
   return (
     <div className="w-[95%] max-w-[600px] mx-auto mt-10 p-8 bg-white rounded-2xl shadow-md overflow-y-auto">
       <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">
-        Create New Product
+        Create New Listing
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -122,6 +125,45 @@ const CreateProduct = () => {
             placeholder="Enter product description"
             className="w-full px-4 py-2 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
           ></textarea>
+        </div>
+
+        {/* More Details (Features) */}
+        <div>
+          <label className="block text-gray-600 mb-2 font-medium">
+            More Details (e.g. Spacious, One Bedroom...)
+          </label>
+          {features.map((feature, index) => (
+            <div key={index} className="flex items-center gap-2 mb-2">
+              <input
+                type="text"
+                value={feature}
+                onChange={(e) => {
+                  const updated = [...features];
+                  updated[index] = e.target.value;
+                  setFeatures(updated);
+                }}
+                placeholder={`Detail ${index + 1}`}
+                className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  setFeatures((prev) => prev.filter((_, i) => i !== index))
+                }
+                className="text-red-500 hover:text-red-700 text-sm"
+                aria-label={`Remove detail ${index + 1}`}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => setFeatures([...features, ""])}
+            className="text-blue-600 hover:underline text-sm"
+          >
+            + Add another detail
+          </button>
         </div>
 
         {/* Category */}
@@ -223,6 +265,7 @@ const CreateProduct = () => {
             className="hidden"
             multiple
             onChange={handleImageChange}
+            accept="image/*"
           />
           <label
             htmlFor="upload"

@@ -16,11 +16,8 @@
     "@mui/styled-engine": "7.0.2",
     "@mui/x-data-grid": "8.0.0",
     "@paypal/react-paypal-js": "8.8.3",
-    "@react-three/drei": "10.0.8",
-    "@react-three/fiber": "9.1.2",
     "@reduxjs/toolkit": "2.7.0",
     "@tailwindcss/vite": "4.1.4",
-    "@types/three": "0.176.0",
     "axios": "1.8.4",
     "country-state-city": "3.2.1",
     "framer-motion": "12.8.2",
@@ -30,14 +27,13 @@
     "react-helmet": "6.1.0",
     "react-icons": "5.5.0",
     "react-intersection-observer": "9.16.0",
-    "react-quill": "^0.0.2",
+    "react-quill": "^2.0.0",
     "react-redux": "9.2.0",
     "react-router-dom": "^7.6.1",
     "react-slick": "0.30.3",
     "react-toastify": "11.0.5",
     "slick-carousel": "1.8.1",
-    "tailwindcss": "4.1.4",
-    "three": "0.176.0"
+    "tailwindcss": "4.1.4"
   },
   "devDependencies": {
     "@eslint/js": "9.22.0",
