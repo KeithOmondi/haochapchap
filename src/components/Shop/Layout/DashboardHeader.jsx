@@ -15,7 +15,7 @@ const DashboardHeader = () => {
           <img
             src="https://res.cloudinary.com/drls2cpnu/image/upload/v1748350947/Hao_Chapchap_logo_h88a00.png"
             alt=""
-            className="w-full h-[70px] "
+            className="h-12 w-50 rounded-md object-cover"
           />
         </Link>
       </div>

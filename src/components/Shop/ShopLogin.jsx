@@ -33,7 +33,7 @@ const ShopLogin = () => {
     <div className="min-h-screen bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 flex flex-col justify-center py-12 px-6">
       <div className="mx-auto w-full max-w-md">
         <h2 className="text-center text-3xl font-bold text-gray-800 mb-6">
-          Login to Your Shop
+          Login to Procceed
         </h2>
         <div className="bg-white p-8 rounded-lg shadow-lg">
           <form className="space-y-6" onSubmit={handleSubmit}>
