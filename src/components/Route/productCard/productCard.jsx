@@ -1,18 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  AiFillHeart,
-  AiOutlineEye,
-  AiOutlineHeart,
-  AiOutlineShoppingCart,
-} from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addToWishlist,
-  removeFromWishlist,
-} from "../../../redux/actions/wishlist";
-import { addTocart } from "../../../redux/actions/cart";
-import { toast } from "react-toastify";
 import ProductDetailsCard from "../productDetailsCard/productDetailsCard";
 import Ratings from "../../Products/Ratings";
 
@@ -32,30 +20,7 @@ const ProductCard = ({ data, isEvent }) => {
     }
   }, [wishlist, data]);
 
-  const removeFromWishlistHandler = (data) => {
-    setClick(!click);
-    dispatch(removeFromWishlist(data));
-  };
-
-  const addToWishlistHandler = (data) => {
-    setClick(!click);
-    dispatch(addToWishlist(data));
-  };
-
-  const addToCartHandler = (id) => {
-    const isItemExists = cart && cart.find((i) => i._id === id);
-    if (isItemExists) {
-      toast.error("Item already in cart!");
-    } else {
-      if (data.stock < 1) {
-        toast.error("Product stock limited!");
-      } else {
-        const cartData = { ...data, qty: 1 };
-        dispatch(addTocart(cartData));
-        toast.success("Item added to cart successfully!");
-      }
-    }
-  };
+  
 
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden relative">
@@ -96,9 +61,7 @@ const ProductCard = ({ data, isEvent }) => {
             )}
           </div>
 
-          <div className="text-gray-600 text-xs">
-            <span>{data.sold_out} sold</span>
-          </div>
+          
         </Link>
       </div>
 
