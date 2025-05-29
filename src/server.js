@@ -1,1 +1,1 @@
-export const server = "https://hccserver2.onrender.com/api/v2";
+export const server = "https://haochapchap-b.onrender.com/api/v2";
