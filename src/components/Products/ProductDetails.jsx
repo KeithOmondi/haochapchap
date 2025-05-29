@@ -184,7 +184,7 @@ const ProductDetailsInfo = ({ data, averageRating, totalReviewsLength }) => {
               {data.shop.createdAt?.slice(0, 10)}
             </p>
             <p className="mt-1">
-              <span className="font-medium">Total Products:</span>{" "}
+              <span className="font-medium">Total Listings:</span>{" "}
               {data.shop.totalProducts}
             </p>
             <p className="mt-1">
