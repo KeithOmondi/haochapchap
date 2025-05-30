@@ -1,27 +1,49 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import EventCard from "./EventCard";
+import { getAllEvents } from "../../redux/actions/event";
 
 const Events = () => {
+  const dispatch = useDispatch();
   const { allEvents, isLoading } = useSelector((state) => state.events);
 
-  return (
-    <div>
-      {!isLoading && (
-        <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ marginBottom: '20px' }}>
-            <h1 style={{ textAlign: 'center', fontSize: '24px', fontWeight: 'bold' }}>Popular Events</h1>
-          </div>
+  useEffect(() => {
+    dispatch(getAllEvents());
+  }, [dispatch]);
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-            {allEvents.length !== 0 ? (
-              <EventCard data={allEvents[0]} />
-            ) : (
-              <h4>No events have been added!</h4>
-            )}
-          </div>
-        </div>
-      )}
+  if (isLoading) {
+    return <div className="text-center mt-10 text-lg">Loading events...</div>;
+  }
+
+  return (
+    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ marginBottom: "20px" }}>
+        <h1
+          style={{
+            textAlign: "center",
+            fontSize: "24px",
+            fontWeight: "bold",
+          }}
+        >
+          Popular Events
+        </h1>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+          gap: "20px",
+        }}
+      >
+        {allEvents.length > 0 ? (
+          allEvents.map((event) => (
+            <EventCard key={event._id} data={event} />
+          ))
+        ) : (
+          <h4>No events have been added!</h4>
+        )}
+      </div>
     </div>
   );
 };

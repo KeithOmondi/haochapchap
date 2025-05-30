@@ -21,12 +21,27 @@ const EventsPage = () => {
         <Loader />
       ) : (
         <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
-          <h1 style={{ textAlign: "center", fontSize: "24px", fontWeight: "bold", marginBottom: "20px" }}>
+          <h1
+            style={{
+              textAlign: "center",
+              fontSize: "24px",
+              fontWeight: "bold",
+              marginBottom: "20px",
+            }}
+          >
             Popular Events
           </h1>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+              gap: "20px",
+            }}
+          >
             {allEvents.length > 0 ? (
-              allEvents.map((event) => <EventCard key={event._id} data={event} active={true} />)
+              allEvents.map((event) => (
+                <EventCard key={event._id} data={event} active={true} />
+              ))
             ) : (
               <h4>No events available!</h4>
             )}

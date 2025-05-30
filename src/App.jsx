@@ -30,14 +30,12 @@ import {
   ShopAllEvents,
   ShopAllOrders,
   ShopAllProducts,
-  ShopAllRefunds,
   ShopCreateEvents,
   ShopCreateProduct,
   ShopDashboardPage,
   ShopHomePage,
   ShopOrderDetails,
   ShopSettingsPage,
-  ShopWithDrawMoneyPage,
 } from "./routes/ShopRoutes";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -200,26 +198,10 @@ const AppContent = () => {
           }
         />
         <Route
-          path="/dashboard-refunds"
-          element={
-            <SellerProtectedRoute>
-              <ShopAllRefunds />
-            </SellerProtectedRoute>
-          }
-        />
-        <Route
           path="/dashboard-coupouns"
           element={
             <SellerProtectedRoute>
               <ShopAllCoupouns />
-            </SellerProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard-withdraw-money"
-          element={
-            <SellerProtectedRoute>
-              <ShopWithDrawMoneyPage />
             </SellerProtectedRoute>
           }
         />

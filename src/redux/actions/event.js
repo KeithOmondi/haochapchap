@@ -1,56 +1,46 @@
 import axios from "axios";
 import { server } from "../../server";
 
-// create event
-export const createevent = (data) => async (dispatch) => {
+export const createevent = (formData) => async (dispatch) => {
   try {
-    dispatch({
-      type: "eventCreateRequest",
-    });
+    dispatch({ type: "eventCreateRequest" });
 
-    const { d } = await axios.post(`${server}/event/create-event`, data);
-    dispatch({
-      type: "eventCreateSuccess",
-      payload: d.event,
-    });
+    const { data } = await axios.post(
+      `${server}/event/create-event`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      }
+    );
+
+    dispatch({ type: "eventCreateSuccess", payload: data.event });
   } catch (error) {
-    // Check if error.response exists before trying to access error.response.data
-    const errorMessage = error.response?.data?.message || "Something went wrong!";
     dispatch({
       type: "eventCreateFail",
-      payload: errorMessage,
+      payload: error.response?.data?.message || "Something went wrong!",
     });
   }
 };
 
-// get all events of a shop
 export const getAllEventsShop = (id) => async (dispatch) => {
   try {
-    dispatch({
-      type: "getAlleventsShopRequest",
-    });
+    dispatch({ type: "getAlleventsShopRequest" });
 
     const { data } = await axios.get(`${server}/event/get-all-events/${id}`);
-    dispatch({
-      type: "getAlleventsShopSuccess",
-      payload: data.events,
-    });
+
+    dispatch({ type: "getAlleventsShopSuccess", payload: data.events });
   } catch (error) {
-    // Check if error.response exists before trying to access error.response.data
-    const errorMessage = error.response?.data?.message || "Something went wrong!";
     dispatch({
       type: "getAlleventsShopFailed",
-      payload: errorMessage,
+      payload: error.response?.data?.message || "Something went wrong!",
     });
   }
 };
 
-// delete event of a shop
 export const deleteEvent = (id) => async (dispatch) => {
   try {
-    dispatch({
-      type: "deleteeventRequest",
-    });
+    dispatch({ type: "deleteeventRequest" });
 
     const { data } = await axios.delete(
       `${server}/event/delete-shop-event/${id}`,
@@ -62,33 +52,35 @@ export const deleteEvent = (id) => async (dispatch) => {
     dispatch({
       type: "deleteeventSuccess",
       payload: data.message,
+      meta: { id },
     });
   } catch (error) {
-    // Check if error.response exists before trying to access error.response.data
-    const errorMessage = error.response?.data?.message || "Something went wrong!";
     dispatch({
       type: "deleteeventFailed",
-      payload: errorMessage,
+      payload: error.response?.data?.message || "Something went wrong!",
     });
   }
 };
 
-// get all events
-
-// Get all events
 export const getAllEvents = () => async (dispatch) => {
   try {
     dispatch({ type: "getAlleventsRequest" });
 
     const { data } = await axios.get(`${server}/event/get-all-events`);
-    dispatch({
-      type: "getAlleventsSuccess",
-      payload: data.events,
-    });
+
+    dispatch({ type: "getAlleventsSuccess", payload: data.events });
   } catch (error) {
     dispatch({
       type: "getAlleventsFailed",
       payload: error.response?.data?.message || "Something went wrong!",
     });
   }
+};
+
+export const clearErrors = () => (dispatch) => {
+  dispatch({ type: "clearErrors" });
+};
+
+export const clearSuccess = () => (dispatch) => {
+  dispatch({ type: "clearSuccess" });
 };

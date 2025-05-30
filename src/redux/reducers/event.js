@@ -2,24 +2,28 @@ import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoading: false,
-  allEvents: [],  // Initialize as an empty array to avoid undefined errors
-  event: null,    // Store single event details if needed
+  allEvents: [],
+  event: null,
   error: null,
-  success: false, // For handling success cases (like creation)
-  message: "",    // For holding success/error messages
+  success: false,
+  message: "",
 };
 
 export const eventReducer = createReducer(initialState, (builder) => {
   builder
-    // Event Create Actions
+    // Create Event
     .addCase("eventCreateRequest", (state) => {
       state.isLoading = true;
+      state.error = null;
+      state.success = false;
+      state.message = "";
     })
     .addCase("eventCreateSuccess", (state, action) => {
       state.isLoading = false;
       state.success = true;
-      state.event = action.payload;  // Store the created event details
+      state.event = action.payload;
       state.message = "Event created successfully!";
+      state.error = null;
     })
     .addCase("eventCreateFail", (state, action) => {
       state.isLoading = false;
@@ -28,14 +32,16 @@ export const eventReducer = createReducer(initialState, (builder) => {
       state.message = "Failed to create event.";
     })
 
-    // Fetching all events
+    // Get All Events
     .addCase("getAlleventsRequest", (state) => {
       state.isLoading = true;
+      state.error = null;
+      state.message = "";
     })
     .addCase("getAlleventsSuccess", (state, action) => {
       state.isLoading = false;
-      // Ensure allEvents is always an array
       state.allEvents = Array.isArray(action.payload) ? action.payload : [];
+      state.error = null;
     })
     .addCase("getAlleventsFailed", (state, action) => {
       state.isLoading = false;
@@ -43,14 +49,16 @@ export const eventReducer = createReducer(initialState, (builder) => {
       state.message = "Failed to fetch events.";
     })
 
-    // Get all events of a shop
+    // Get All Events of Shop
     .addCase("getAlleventsShopRequest", (state) => {
       state.isLoading = true;
+      state.error = null;
+      state.message = "";
     })
     .addCase("getAlleventsShopSuccess", (state, action) => {
       state.isLoading = false;
-      // Ensure events is always an array
       state.allEvents = Array.isArray(action.payload) ? action.payload : [];
+      state.error = null;
     })
     .addCase("getAlleventsShopFailed", (state, action) => {
       state.isLoading = false;
@@ -58,23 +66,36 @@ export const eventReducer = createReducer(initialState, (builder) => {
       state.message = "Failed to fetch events for shop.";
     })
 
-    // Delete event of shop
+    // Delete Event
     .addCase("deleteeventRequest", (state) => {
       state.isLoading = true;
+      state.error = null;
+      state.message = "";
     })
     .addCase("deleteeventSuccess", (state, action) => {
       state.isLoading = false;
-      state.message = action.payload;  // Message from the backend after deletion
+      state.message = action.payload;
+      state.error = null;
+
+      // Optional: Remove the deleted event from allEvents
+      state.allEvents = state.allEvents.filter(
+        (event) => event._id !== action.meta?.id
+      );
     })
+
     .addCase("deleteeventFailed", (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
       state.message = "Failed to delete event.";
     })
 
-    // Clear Errors (useful for resetting error state after showing an error message)
+    // Clear Errors and Success
     .addCase("clearErrors", (state) => {
       state.error = null;
+      state.message = "";
+    })
+    .addCase("clearSuccess", (state) => {
+      state.success = false;
       state.message = "";
     });
 });
