@@ -6,8 +6,6 @@ import { useDispatch } from "react-redux";
 import {
   HomePage,
   ActivationPage,
-  LoginPage,
-  SignupPage,
   ProfilePage,
   ProductsPage,
   ContactLenses,
@@ -70,8 +68,6 @@ const AppContent = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/about" element={<About/>} />
         <Route path="/product/:id" element={<ProductDetailsPage />} />
