@@ -5,7 +5,7 @@ import { getAllBookings } from "../../redux/actions/booking";
 
 const AllBookings = () => {
   const dispatch = useDispatch();
-  const { bookings, isLoading } = useSelector((state) => state.booking);
+  const { bookings = [], isLoading } = useSelector((state) => state.booking || {});
 
   useEffect(() => {
     dispatch(getAllBookings());
@@ -22,7 +22,7 @@ const AllBookings = () => {
       minWidth: 180,
       flex: 1,
       valueFormatter: (params) => {
-        if (!params.value) return "N/A";
+        if (!params || !params.value) return "N/A";
         const date = new Date(params.value);
         if (isNaN(date)) return "Invalid Date";
         return date.toLocaleString(undefined, {
@@ -36,16 +36,18 @@ const AllBookings = () => {
     },
   ];
 
-  const rows = bookings.map((booking) => ({
-    id: booking._id,
-    name: booking.name,
-    email: booking.email,
-    phone: booking.phone,
-    bookingDateTime: booking.bookingDateTime,
-  }));
+  const rows = Array.isArray(bookings)
+    ? bookings.map((booking) => ({
+        id: booking._id,
+        name: booking.name,
+        email: booking.email,
+        phone: booking.phone,
+        bookingDateTime: booking.bookingDateTime,
+      }))
+    : [];
 
   return (
-    <div className="w-full mx-8 pt-1 mt-10 bg-white" style={{ minWidth: 650 }}>
+    <div className="w-full px-8 pt-1 mt-10 bg-white" style={{ minWidth: 650 }}>
       {isLoading ? (
         <div className="text-center py-10 text-gray-600">Loading bookings...</div>
       ) : (
