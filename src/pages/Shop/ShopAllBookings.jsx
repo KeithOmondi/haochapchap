@@ -1,7 +1,7 @@
 import React from 'react'
 import DashboardHeader from '../../components/Shop/Layout/DashboardHeader'
 import DashboardSideBar from '../../components/Shop/Layout/DashboardSideBar'
-import AllOrders from '../../components/Shop/AllOrders'
+import AllBookings from '../../components/Shop/AllBookings'
 
 const ShopAllOrders = () => {
   return (
@@ -12,7 +12,7 @@ const ShopAllOrders = () => {
                   <DashboardSideBar active={2} />
                 </div>
                 <div className="w-full justify-center flex">
-                   <AllOrders />
+                   <AllBookings />
                 </div>
               </div>
         </div>

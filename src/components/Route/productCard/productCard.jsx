@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProductDetailsCard from "../productDetailsCard/productDetailsCard";
-import Ratings from "../../Products/Ratings";
+//import Ratings from "../../Products/Ratings";
 
 
 const ProductCard = ({ data, isEvent }) => {
@@ -46,9 +46,7 @@ const ProductCard = ({ data, isEvent }) => {
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
 
-          <div className="flex">
-          <Ratings rating={data?.ratings} />
-          </div>
+          
 
           <div className="flex items-center space-x-2 mb-2">
             <h5 className="text-primary-600 font-bold text-lg">

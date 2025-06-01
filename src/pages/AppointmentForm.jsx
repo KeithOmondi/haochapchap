@@ -1,17 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Layout/Header';
 import Footer from '../components/Layout/Footer';
+import { createBooking, clearBookingState } from '../redux/actions/booking';
+
+// Import Toastify
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function AppointmentForm() {
+  const dispatch = useDispatch();
+  const { success, error } = useSelector(state => state.booking);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     date: '',
     time: '',
     message: '',
   });
 
-  const [submitted, setSubmitted] = useState(false);
+  useEffect(() => {
+    if (success) {
+      toast.success('Appointment booked successfully!');
+      const timeout = setTimeout(() => dispatch(clearBookingState()), 4000);
+      return () => clearTimeout(timeout);
+    }
+    if (error) {
+      toast.error(error);
+      const timeout = setTimeout(() => dispatch(clearBookingState()), 4000);
+      return () => clearTimeout(timeout);
+    }
+  }, [success, error, dispatch]);
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -22,12 +43,11 @@ export default function AppointmentForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    // Add backend integration here (e.g., fetch or axios)
-    console.log('Form submitted:', formData);
+    dispatch(createBooking(formData));
     setFormData({
       name: '',
       email: '',
+      phone: '',
       date: '',
       time: '',
       message: '',
@@ -36,92 +56,78 @@ export default function AppointmentForm() {
 
   return (
     <>
-    <Header />
+      <Header />
+      <div className="max-w-xl mx-auto bg-white p-6 rounded-md shadow-md mt-10">
+        <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800">
+          Book an Appointment
+        </h2>
 
-    <div className="max-w-xl mx-auto bg-white p-6 rounded-md shadow-md mt-10">
-      <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800">
-        Book an Appointment
-      </h2>
-
-      {submitted && (
-        <div className="bg-green-100 text-green-700 p-3 rounded mb-4">
-          Appointment booked successfully!
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-gray-600 font-medium mb-1">Full Name</label>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Full Name"
+            className="w-full border rounded px-4 py-2"
           />
-        </div>
-
-        <div>
-          <label className="block text-gray-600 font-medium mb-1">Email Address</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Email"
+            className="w-full border rounded px-4 py-2"
           />
-        </div>
-
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <label className="block text-gray-600 font-medium mb-1">Date</label>
+          <input
+            type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+            placeholder="Phone Number"
+            className="w-full border rounded px-4 py-2"
+          />
+          <div className="flex gap-4">
             <input
               type="date"
               name="date"
               value={formData.date}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="flex-1 border rounded px-4 py-2"
             />
-          </div>
-
-          <div className="flex-1">
-            <label className="block text-gray-600 font-medium mb-1">Time</label>
             <input
               type="time"
               name="time"
               value={formData.time}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="flex-1 border rounded px-4 py-2"
             />
           </div>
-        </div>
-
-        <div>
-          <label className="block text-gray-600 font-medium mb-1">Additional Notes</label>
           <textarea
             name="message"
-            rows="4"
             value={formData.message}
             onChange={handleChange}
-            placeholder="Optional..."
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Optional notes..."
+            rows="4"
+            className="w-full border rounded px-4 py-2"
           />
-        </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          >
+            Confirm Booking
+          </button>
+        </form>
+      </div>
+      <Footer />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-        >
-          Confirm Booking
-        </button>
-      </form>
-    </div>
-
-    <Footer />
+      {/* Add ToastContainer once in your app (can be here or higher up) */}
+      <ToastContainer position="top-right" autoClose={4000} />
     </>
   );
 }

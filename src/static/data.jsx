@@ -14,7 +14,7 @@ export const navData = [
   },
   {
     title: "Rent",
-    url: "/products"
+    url: "/listings"
   },
   {
     title: "Company",

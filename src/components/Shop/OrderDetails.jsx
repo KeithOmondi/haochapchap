@@ -5,7 +5,7 @@ import { BsFillBagFill } from "react-icons/bs";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { server } from "../../server";
-import { getAllOrdersOfShop } from "../../redux/actions/order";
+import { getAllBookings } from "../../redux/actions/booking";
 
 const OrderDetails = () => {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const OrderDetails = () => {
 
   useEffect(() => {
     if (seller?._id) {
-      dispatch(getAllOrdersOfShop(seller._id));
+      dispatch(getAllBookings(seller._id));
     }
   }, [dispatch, seller]);
 

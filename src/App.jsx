@@ -26,9 +26,10 @@ import {
 
 import {
   SellerActivationPage,
+  ShopAllBookings,
   ShopAllCoupouns,
   ShopAllEvents,
-  ShopAllOrders,
+  ShopAllMessages,
   ShopAllProducts,
   ShopCreateEvents,
   ShopCreateProduct,
@@ -69,7 +70,7 @@ const AppContent = () => {
         <Route path="/events" element={<EventsPage />} />
         <Route path="/about" element={<About/>} />
         <Route path="/product/:id" element={<ProductDetailsPage />} />
-        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/listings" element={<ProductsPage />} />
         <Route path="/apartment" element={<Apartments />} />
         <Route path="/services" element={<Services />} />
         <Route path="/products" element={<ContactLenses />} />
@@ -158,15 +159,15 @@ const AppContent = () => {
           }
         />
         <Route
-          path="/dashboard-orders"
+          path="/dashboard-bookings"
           element={
             <SellerProtectedRoute>
-              <ShopAllOrders />
+              <ShopAllBookings />
             </SellerProtectedRoute>
           }
         />
         <Route
-          path="/dashboard-products"
+          path="/dashboard-listings"
           element={
             <SellerProtectedRoute>
               <ShopAllProducts />
@@ -174,7 +175,7 @@ const AppContent = () => {
           }
         />
         <Route
-          path="/dashboard-create-product"
+          path="/dashboard-create-listing"
           element={
             <SellerProtectedRoute>
               <ShopCreateProduct />
@@ -186,6 +187,14 @@ const AppContent = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllEvents />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-messages"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllMessages />
             </SellerProtectedRoute>
           }
         />

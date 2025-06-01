@@ -5,6 +5,7 @@ import Footer from "../components/Layout/Footer";
 import ProductCard from "../components/Route/productCard/productCard";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../redux/actions/product";
+import { categoriesData } from "../static/data";
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
@@ -73,10 +74,11 @@ const ProductsPage = () => {
             onChange={(e) => setSelectedCategory(e.target.value)}
           >
             <option value="">All Categories</option>
-            <option value="Bedsitter">Bedsitter</option>
-            <option value="1 Bedroom">1 Bedroom</option>
-            <option value="2 Bedroom">2 Bedroom</option>
-            <option value="3 Bedroom">3 Bedroom</option>
+            {categoriesData.map((category) => (
+              <option key={category.id} value={category.title}>
+                {category.title}
+              </option>
+            ))}
           </select>
 
           {/* Location Filter */}

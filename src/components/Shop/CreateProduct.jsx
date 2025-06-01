@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createProduct } from "../../redux/actions/product";
 import { categoriesData } from "../../static/data";
 import { toast } from "react-toastify";
+import { useDropzone } from "react-dropzone";
 
 const CreateProduct = () => {
   const { seller } = useSelector((state) => state.seller);
@@ -12,54 +12,92 @@ const CreateProduct = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [images, setImages] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [features, setFeatures] = useState([""]); // <-- Added features state
+  const [features, setFeatures] = useState([""]);
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
   const [location, setLocation] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
   const [discountPrice, setDiscountPrice] = useState("");
   const [stock, setStock] = useState("");
+  // For storing base64 preview only (optional)
+  const [imageFiles, setImageFiles] = useState([]);
+  const [videoFiles, setVideoFiles] = useState([]);
+  // Final arrays of uploaded {public_id, url}
+  const [images, setImages] = useState([]);
+  const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
+    if (error) toast.error(error);
     if (success) {
       toast.success("Product created successfully!");
       navigate("/dashboard");
-      // Reset form
-      setName("");
-      setDescription("");
-      setFeatures([""]); // reset features
-      setCategory("");
-      setTags("");
-      setLocation("");
-      setOriginalPrice("");
-      setDiscountPrice("");
-      setStock("");
-      setImages([]);
+      resetForm();
     }
   }, [error, success, navigate]);
 
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
+  const resetForm = () => {
+    setName("");
+    setDescription("");
+    setFeatures([""]);
+    setCategory("");
+    setTags("");
+    setLocation("");
+    setOriginalPrice("");
+    setDiscountPrice("");
+    setStock("");
+    setImageFiles([]);
+    setVideoFiles([]);
     setImages([]);
+    setVideos([]);
+  };
 
-    files.forEach((file) => {
+  const onDrop = (acceptedFiles) => {
+    const newImages = [];
+    const newVideos = [];
+
+    acceptedFiles.forEach((file) => {
       const reader = new FileReader();
       reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImages((old) => [...old, reader.result]);
+        if (file.type.startsWith("image/")) {
+          newImages.push({ file, preview: reader.result });
+          setImageFiles((prev) => [...prev, { file, preview: reader.result }]);
+        } else if (file.type.startsWith("video/")) {
+          newVideos.push({ file, preview: reader.result });
+          setVideoFiles((prev) => [...prev, { file, preview: reader.result }]);
         }
       };
       reader.readAsDataURL(file);
     });
   };
 
-  const handleSubmit = (e) => {
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: { "image/*": [], "video/*": [] },
+    onDrop,
+  });
+
+  // IMPORTANT: Here you must upload images/videos to your server or cloud storage (e.g. Cloudinary)
+  // and get back the {public_id, url} for each file.
+  // For this example, let's simulate that upload with dummy IDs and URLs,
+  // but in real use you must implement upload logic before dispatching createProduct.
+
+  const uploadFilesMock = async () => {
+    // Simulate upload delay and return dummy data
+    const uploadedImages = imageFiles.map((img, idx) => ({
+      public_id: `img_${Date.now()}_${idx}`,
+      url: img.preview, // in real, use cloud url after upload
+    }));
+
+    const uploadedVideos = videoFiles.map((vid, idx) => ({
+      public_id: `vid_${Date.now()}_${idx}`,
+      url: vid.preview,
+    }));
+
+    return { uploadedImages, uploadedVideos };
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
@@ -69,89 +107,85 @@ const CreateProduct = () => {
       !discountPrice ||
       !stock ||
       !location ||
-      images.length === 0
+      (imageFiles.length === 0 && videoFiles.length === 0)
     ) {
-      toast.error("Please fill all required fields");
+      toast.error("Please fill all required fields and upload at least one image or video.");
       return;
     }
 
-    const productData = {
-      name,
-      description,
-      details: features.filter((f) => f.trim() !== ""), // send non-empty features as details
-      category,
-      tags,
-      location,
-      originalPrice: parseFloat(originalPrice),
-      discountPrice: parseFloat(discountPrice),
-      stock: parseInt(stock),
-      shopId: seller?._id,
-      images,
-    };
+    try {
+      // Upload images/videos first and get their {public_id, url}
+      const { uploadedImages, uploadedVideos } = await uploadFilesMock();
 
-    dispatch(createProduct(productData));
+      // Set the final arrays
+      setImages(uploadedImages);
+      setVideos(uploadedVideos);
+
+      // Prepare product data payload
+      const productData = {
+        name,
+        description,
+        details: features.filter((f) => f.trim() !== ""),
+        category,
+        tags,
+        location,
+        originalPrice: parseFloat(originalPrice) || 0,
+        discountPrice: parseFloat(discountPrice),
+        stock: parseInt(stock),
+        shopId: seller?._id,
+        images: uploadedImages,
+        videos: uploadedVideos,
+      };
+
+      // Dispatch the create product action
+      dispatch(createProduct(productData));
+    } catch (error) {
+      toast.error("Failed to upload files. Please try again.");
+    }
   };
 
   return (
-    <div className="w-[95%] max-w-[600px] mx-auto mt-10 p-8 bg-white rounded-2xl shadow-md overflow-y-auto">
-      <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">
-        Create New Listing
-      </h2>
-
+    <div className="w-[95%] max-w-[600px] mx-auto mt-10 p-8 bg-white rounded-2xl shadow-md">
+      <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Create New Listing</h2>
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Product Name */}
-        <div>
-          <label className="block text-gray-600 mb-2 font-medium">
-            Product Name <span className="text-red-500">*</span>
-          </label>
+        <FormField label="Product Name" required>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="form-input"
             placeholder="Enter product name"
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-        </div>
+        </FormField>
 
-        {/* Description */}
-        <div>
-          <label className="block text-gray-600 mb-2 font-medium">
-            Description <span className="text-red-500">*</span>
-          </label>
+        <FormField label="Description" required>
           <textarea
-            rows="6"
+            rows="4"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            className="form-input resize-none"
             placeholder="Enter product description"
-            className="w-full px-4 py-2 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-          ></textarea>
-        </div>
+          />
+        </FormField>
 
-        {/* More Details (Features) */}
-        <div>
-          <label className="block text-gray-600 mb-2 font-medium">
-            More Details (e.g. Spacious, One Bedroom...)
-          </label>
-          {features.map((feature, index) => (
-            <div key={index} className="flex items-center gap-2 mb-2">
+        <FormField label="More Details">
+          {features.map((detail, index) => (
+            <div key={index} className="flex gap-2 mb-2">
               <input
                 type="text"
-                value={feature}
+                value={detail}
                 onChange={(e) => {
                   const updated = [...features];
                   updated[index] = e.target.value;
                   setFeatures(updated);
                 }}
+                className="form-input flex-1"
                 placeholder={`Detail ${index + 1}`}
-                className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
               <button
                 type="button"
-                onClick={() =>
-                  setFeatures((prev) => prev.filter((_, i) => i !== index))
-                }
-                className="text-red-500 hover:text-red-700 text-sm"
-                aria-label={`Remove detail ${index + 1}`}
+                onClick={() => setFeatures(features.filter((_, i) => i !== index))}
+                className="text-red-500 hover:text-red-700"
               >
                 Remove
               </button>
@@ -160,21 +194,17 @@ const CreateProduct = () => {
           <button
             type="button"
             onClick={() => setFeatures([...features, ""])}
-            className="text-blue-600 hover:underline text-sm"
+            className="text-blue-600 hover:underline"
           >
-            + Add another detail
+            + Add Detail
           </button>
-        </div>
+        </FormField>
 
-        {/* Category */}
-        <div>
-          <label className="block text-gray-600 mb-2 font-medium">
-            Category <span className="text-red-500">*</span>
-          </label>
+        <FormField label="Category" required>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="form-input"
           >
             <option value="">Select a category</option>
             {categoriesData.map((item, index) => (
@@ -183,123 +213,109 @@ const CreateProduct = () => {
               </option>
             ))}
           </select>
-        </div>
+        </FormField>
 
-        {/* Tags */}
-        <div>
-          <label className="block text-gray-600 mb-2 font-medium">Tags</label>
+        <FormField label="Tags">
           <input
             type="text"
             value={tags}
             onChange={(e) => setTags(e.target.value)}
-            placeholder="Enter product tags"
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="form-input"
+            placeholder="Enter tags separated by commas"
           />
-        </div>
+        </FormField>
 
-        {/* Location */}
-        <div>
-          <label className="block text-gray-600 mb-2 font-medium">
-            Location <span className="text-red-500">*</span>
-          </label>
+        <FormField label="Location" required>
           <input
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            placeholder="e.g. Nairobi, Kisumu"
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="form-input"
+            placeholder="e.g., Nairobi, Kisumu"
           />
-        </div>
+        </FormField>
 
-        {/* Prices */}
         <div className="flex gap-4">
-          <div className="flex-1">
-            <label className="block text-gray-600 mb-2 font-medium">
-              Original Price
-            </label>
+          <FormField label="Original Price">
             <input
               type="number"
               value={originalPrice}
               onChange={(e) => setOriginalPrice(e.target.value)}
+              className="form-input"
               placeholder="Original price"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              min="0"
             />
-          </div>
-
-          <div className="flex-1">
-            <label className="block text-gray-600 mb-2 font-medium">
-              Discounted Price <span className="text-red-500">*</span>
-            </label>
+          </FormField>
+          <FormField label="Discounted Price" required>
             <input
               type="number"
               value={discountPrice}
               onChange={(e) => setDiscountPrice(e.target.value)}
+              className="form-input"
               placeholder="Discounted price"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              min="0"
             />
-          </div>
+          </FormField>
         </div>
 
-        {/* Stock */}
-        <div>
-          <label className="block text-gray-600 mb-2 font-medium">
-            Stock <span className="text-red-500">*</span>
-          </label>
+        <FormField label="Stock" required>
           <input
             type="number"
             value={stock}
             onChange={(e) => setStock(e.target.value)}
-            placeholder="Enter available stock"
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="form-input"
+            placeholder="Available stock"
+            min="0"
           />
-        </div>
+        </FormField>
 
-        {/* Upload Images */}
-        <div>
-          <label className="block text-gray-600 mb-2 font-medium">
-            Upload Images <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="file"
-            id="upload"
-            className="hidden"
-            multiple
-            onChange={handleImageChange}
-            accept="image/*"
-          />
-          <label
-            htmlFor="upload"
-            className="flex items-center gap-2 text-blue-500 cursor-pointer hover:text-blue-700"
+        <FormField label="Upload Images & Videos" required>
+          <div
+            {...getRootProps()}
+            className="cursor-pointer border-dashed border-2 border-gray-400 p-4 rounded-md text-center hover:border-blue-500 transition"
           >
-            <AiOutlinePlusCircle size={24} />
-            <span>Upload Images</span>
-          </label>
+            <input {...getInputProps()} />
+            <p>Drag & drop or click to upload images and videos</p>
+          </div>
 
-          {/* Image Preview */}
           <div className="flex flex-wrap gap-3 mt-3">
-            {images.map((img, idx) => (
+            {imageFiles.map((img, idx) => (
               <img
-                src={img}
                 key={idx}
-                alt="Uploaded"
-                className="h-[100px] w-[100px] object-contain rounded-md border"
+                src={img.preview}
+                alt={`uploaded-img-${idx}`}
+                className="w-[100px] h-[100px] object-cover rounded-md border"
+              />
+            ))}
+            {videoFiles.map((vid, idx) => (
+              <video
+                key={idx}
+                controls
+                src={vid.preview}
+                className="w-[150px] h-[100px] object-cover rounded-md border"
               />
             ))}
           </div>
-        </div>
+        </FormField>
 
-        {/* Submit Button */}
-        <div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300"
-          >
-            Create Product
-          </button>
-        </div>
+        <button
+          type="submit"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition"
+        >
+          Create Product
+        </button>
       </form>
     </div>
   );
 };
+
+const FormField = ({ label, required, children }) => (
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
+    {children}
+  </div>
+);
 
 export default CreateProduct;

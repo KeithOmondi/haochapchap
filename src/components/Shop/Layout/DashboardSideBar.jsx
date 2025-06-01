@@ -4,10 +4,9 @@ import { FiPackage, FiShoppingBag } from "react-icons/fi";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { VscNewFile } from "react-icons/vsc";
-import { CiMoneyBill, CiSettings } from "react-icons/ci";
+import { CiSettings } from "react-icons/ci";
 import { Link } from "react-router-dom";
-import { BiMessageSquareDetail } from "react-icons/bi";
-import { HiOutlineReceiptRefund } from "react-icons/hi";
+import { MdMessage } from "react-icons/md";
 
 const DashboardSideBar = ({ active }) => {
   return (
@@ -30,7 +29,7 @@ const DashboardSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-orders" className="w-full flex items-center">
+        <Link to="/dashboard-bookings" className="w-full flex items-center">
           <FiShoppingBag
             size={30}
             color={`${active === 2 ? "crimson" : "#555"}`}
@@ -40,27 +39,27 @@ const DashboardSideBar = ({ active }) => {
               active === 2 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            All Orders
+            All Bookings
           </h5>
         </Link>
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-products" className="w-full flex items-center">
+        <Link to="/dashboard-listings" className="w-full flex items-center">
           <FiPackage size={30} color={`${active === 3 ? "crimson" : "#555"}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
               active === 3 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            All Products
+            All Listings
           </h5>
         </Link>
       </div>
 
       <div className="w-full flex items-center p-4">
         <Link
-          to="/dashboard-create-product"
+          to="/dashboard-create-listing"
           className="w-full flex items-center"
         >
           <AiOutlineFolderAdd
@@ -72,7 +71,7 @@ const DashboardSideBar = ({ active }) => {
               active === 4 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            Create Product
+            Create Listing
           </h5>
         </Link>
       </div>
@@ -109,8 +108,6 @@ const DashboardSideBar = ({ active }) => {
         </Link>
       </div>
 
-    
-
       <div className="w-full flex items-center p-4">
         <Link to="/dashboard-coupouns" className="w-full flex items-center">
           <AiOutlineGift
@@ -127,6 +124,21 @@ const DashboardSideBar = ({ active }) => {
         </Link>
       </div>
 
+      <div className="w-full flex items-center p-4">
+        <Link to="/dashboard-messages" className="w-full flex items-center">
+          <MdMessage
+            size={30}
+            color={`${active === 10 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 10 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Messages
+          </h5>
+        </Link>
+      </div>
 
       <div className="w-full flex items-center p-4">
         <Link to="/settings" className="w-full flex items-center">
