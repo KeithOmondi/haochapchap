@@ -6,7 +6,7 @@ const Categories = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (category) => {
-    navigate(`/products?category=${category.title}`);
+    navigate(`/listings?category=${category.title}`);
   };
 
   return (

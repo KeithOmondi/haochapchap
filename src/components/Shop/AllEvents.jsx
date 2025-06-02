@@ -4,34 +4,45 @@ import React, { useEffect } from "react";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { deleteEvent, getAllEventsShop } from "../../redux/actions/event";
 import Loader from "../Loader/Loader";
+import { deleteEvent, getAllEvents } from "../../redux/actions/event";
 
 const AllEvents = () => {
-  const { events, isLoading } = useSelector((state) => state.events);
-  const { seller } = useSelector((state) => state.seller);
-
   const dispatch = useDispatch();
+
+  // Use correct slice from your redux store: events.allEvents instead of events.events
+  const { allEvents: events, isLoading } = useSelector((state) => state.events);
+  const { seller } = useSelector((state) => state.seller);
 
   useEffect(() => {
     if (seller?._id) {
-      dispatch(getAllEventsShop(seller._id));
+      dispatch(getAllEvents(seller._id));
     }
   }, [dispatch, seller]);
 
-  const handleDelete = (id) => {
-    dispatch(deleteEvent(id)); 
-    dispatch(getAllEventsShop(seller._id)); // Re-fetch events after deletion
+  const handleDelete = async (id) => {
+    await dispatch(deleteEvent(id));
+    dispatch(getAllEvents(seller._id)); // Refresh events list after delete
   };
-
-  console.log("Fetched Events: ", events); // Debug log to ensure events are being fetched
 
   const columns = [
     { field: "id", headerName: "Event Id", minWidth: 150, flex: 0.7 },
     { field: "name", headerName: "Name", minWidth: 180, flex: 1.4 },
     { field: "price", headerName: "Price", minWidth: 100, flex: 0.6 },
-    { field: "Stock", headerName: "Stock", type: "number", minWidth: 80, flex: 0.5 },
-    { field: "sold", headerName: "Sold out", type: "number", minWidth: 130, flex: 0.6 },
+    {
+      field: "Stock",
+      headerName: "Stock",
+      type: "number",
+      minWidth: 80,
+      flex: 0.5,
+    },
+    {
+      field: "sold",
+      headerName: "Sold out",
+      type: "number",
+      minWidth: 130,
+      flex: 0.6,
+    },
     {
       field: "Preview",
       flex: 0.8,
@@ -55,23 +66,21 @@ const AllEvents = () => {
       minWidth: 120,
       headerName: "",
       sortable: false,
-      renderCell: (params) => {
-        return (
-          <Button onClick={() => handleDelete(params.id)}>
-            <AiOutlineDelete size={20} />
-          </Button>
-        );
-      },
+      renderCell: (params) => (
+        <Button onClick={() => handleDelete(params.id)}>
+          <AiOutlineDelete size={20} />
+        </Button>
+      ),
     },
   ];
 
-  const rows = events?.map((item) => ({
+  const rows = (events || []).map((item) => ({
     id: item._id,
     name: item.name,
     price: "US$ " + item.discountPrice,
     Stock: item.stock,
     sold: item.sold_out,
-  })) || [];
+  }));
 
   return (
     <>

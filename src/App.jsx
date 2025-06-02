@@ -8,7 +8,6 @@ import {
   ActivationPage,
   ProfilePage,
   ProductsPage,
-  ContactLenses,
   BlueLight,
   CheckoutPage,
   PaymentPage,
@@ -73,7 +72,6 @@ const AppContent = () => {
         <Route path="/listings" element={<ProductsPage />} />
         <Route path="/apartment" element={<Apartments />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/products" element={<ContactLenses />} />
         <Route path="/why-us" element={<WhyUs />} />
         <Route path="/career" element={<Careers />} />
         <Route path="/blue-light-glasses" element={<BlueLight />} />

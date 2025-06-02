@@ -5,17 +5,30 @@ export const createevent = (formData) => async (dispatch) => {
   try {
     dispatch({ type: "eventCreateRequest" });
 
+    // Log formData contents
+    console.log("Submitting FormData:");
+    for (let [key, value] of formData.entries()) {
+      if (value instanceof File) {
+        console.log(`${key}: [File] name=${value.name}, type=${value.type}, size=${value.size} bytes`);
+      } else {
+        console.log(`${key}:`, value);
+      }
+    }
+
     const { data } = await axios.post(
       `${server}/event/create-event`,
       formData,
       {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
         withCredentials: true,
       }
     );
 
     dispatch({ type: "eventCreateSuccess", payload: data.event });
   } catch (error) {
+    console.error("Create Event API Error:", error.response?.data || error.message);
     dispatch({
       type: "eventCreateFail",
       payload: error.response?.data?.message || "Something went wrong!",

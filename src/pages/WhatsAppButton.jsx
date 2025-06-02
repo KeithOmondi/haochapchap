@@ -3,7 +3,7 @@ import React from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
 
 const WhatsAppButton = () => {
-  const phoneNumber = "254734231219"; // Use international format without the '+' sign
+  const phoneNumber = "254743231219"; // Use international format without the '+' sign
 
   return (
     <a

@@ -7,7 +7,6 @@ import ProductDetailsPage from "../pages/ProductDetailsPage";
 import ProductsPage from "../pages/ProductsPage";
 import Apartments from "../pages/Apartments";
 import Services from "../pages/Services";
-import ContactLenses from "../pages/ContactLenses";
 import BlueLight from "../pages/BlueLight";
 import CheckoutPage from "../pages/CheckoutPage";
 import PaymentPage from "../pages/PaymentPage";
@@ -29,7 +28,6 @@ export {
     ProductsPage,
     Apartments,
     Services,
-    ContactLenses,
     BlueLight,
     CheckoutPage,
     PaymentPage,

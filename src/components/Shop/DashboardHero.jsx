@@ -56,8 +56,8 @@ const DashboardHero = () => {
           <h5 className="text-2xl font-semibold text-gray-800 pl-8">
             {products?.length || 0}
           </h5>
-          <Link to="/dashboard-products">
-            <p className="pt-4 pl-2 text-teal-600 hover:underline">
+          <Link to="/dashboard-listings">
+            <p className="pt-4 pl-2 text-blue-900 hover:underline">
               View Properties
             </p>
           </Link>
@@ -75,7 +75,7 @@ const DashboardHero = () => {
             {bookings?.length || 0}
           </h5>
           <Link to="/dashboard-bookings">
-            <p className="pt-4 pl-2 text-teal-600 hover:underline">
+            <p className="pt-4 pl-2 text-blue-900 hover:underline">
               View Bookings
             </p>
           </Link>

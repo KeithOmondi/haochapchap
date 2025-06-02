@@ -3,12 +3,12 @@ import Slider from "react-slick";
 
 // Example partner logos - replace with actual partner logo URLs
 const partners = [
-  "https://res.cloudinary.com/drls2cpnu/image/upload/v1748350947/Hao_Chapchap_logo_h88a00.png",
-  "https://via.placeholder.com/150x80?text=Partner+2",
-  "https://via.placeholder.com/150x80?text=Partner+3",
-  "https://via.placeholder.com/150x80?text=Partner+4",
-  "https://via.placeholder.com/150x80?text=Partner+5",
-  "https://via.placeholder.com/150x80?text=Partner+6",
+  "https://t4.ftcdn.net/jpg/02/80/29/41/240_F_280294175_3ZDKmagiDMsKPp2qqKxG3Y9c2DyODna7.jpg",
+  "https://t3.ftcdn.net/jpg/03/82/20/02/240_F_382200288_IoJpNuvMAj9pcp52XkUnIyqv7SM2Ib7Q.jpg",
+  "https://t4.ftcdn.net/jpg/12/22/30/69/240_F_1222306923_lh7YawAtZuqRHHZCDRvtmy4r6kGSfjcR.jpg",
+  "https://t4.ftcdn.net/jpg/03/77/71/85/240_F_377718554_J5cEBUNVXMmr42qEAcebcuLkcXpt5BXF.jpg",
+  "https://t4.ftcdn.net/jpg/03/22/24/81/240_F_322248124_MotgJGRwML534zEtZU03jbkDVIxpX6ij.jpg",
+  "https://t4.ftcdn.net/jpg/01/99/17/59/240_F_199175991_OdxR4CCwGChafAOfMvMN7pNE1DFIMd5b.jpg",
 ];
 
 const PartnersCarousel = () => {
@@ -34,7 +34,7 @@ const PartnersCarousel = () => {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-10">
+    <section className="max-w-6xl mx-auto px-4 py-10">
       <h2 className="text-3xl font-bold text-center mb-8">Our Trusted Partners</h2>
       <Slider {...settings}>
         {partners.map((logo, index) => (
