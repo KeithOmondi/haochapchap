@@ -6,6 +6,7 @@ import ProductCard from "../components/Route/productCard/productCard";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../redux/actions/product";
 import { categoriesData } from "../static/data";
+import WhatsAppButton from "./WhatsAppButton";
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
@@ -136,6 +137,7 @@ const ProductsPage = () => {
           )}
         </div>
       </div>
+      <WhatsAppButton />
       <Footer />
     </div>
   );

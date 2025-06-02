@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Layout/Header';
 import Footer from '../components/Layout/Footer';
+import WhatsAppButton from './WhatsAppButton';
 
 const Careers = () => {
   return (
@@ -52,6 +53,7 @@ const Careers = () => {
           </div>
         </div>
       </div>
+      <WhatsAppButton />
 
       <Footer />
     </>

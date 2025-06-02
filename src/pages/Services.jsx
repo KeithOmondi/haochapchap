@@ -10,6 +10,7 @@ import {
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import { Link } from "react-router-dom";
+import WhatsAppButton from "./WhatsAppButton";
 
 const services = [
   {
@@ -125,6 +126,8 @@ const Services = () => {
           </div>
         </div>
       </section>
+
+      <WhatsAppButton />
 
       <Footer />
     </>

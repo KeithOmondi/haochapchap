@@ -15,6 +15,7 @@ import { server } from "../server";
 // Import ToastContainer and toast
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import WhatsAppButton from "./WhatsAppButton";
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -160,6 +161,7 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
+      <WhatsAppButton />
       <Footer />
 
       {/* Toast container must be somewhere in your app */}

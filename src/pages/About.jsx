@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
+import WhatsAppButton from "./WhatsAppButton";
 
 const About = () => {
     return (
@@ -52,6 +53,8 @@ const About = () => {
                     </motion.div>
                 </div>
             </section>
+
+            <WhatsAppButton />
 
             <Footer />
         </>
