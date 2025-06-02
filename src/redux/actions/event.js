@@ -1,99 +1,80 @@
 import axios from "axios";
 import { server } from "../../server";
 
-export const createevent = (formData) => async (dispatch) => {
+// CREATE EVENT
+export const createevent = (eventData) => async (dispatch) => {
   try {
     dispatch({ type: "eventCreateRequest" });
 
-    // Log formData contents
-    console.log("Submitting FormData:");
-    for (let [key, value] of formData.entries()) {
-      if (value instanceof File) {
-        console.log(`${key}: [File] name=${value.name}, type=${value.type}, size=${value.size} bytes`);
-      } else {
-        console.log(`${key}:`, value);
-      }
-    }
+    const { data } = await axios.post(`${server}/event/create-event`, eventData);
 
-    const { data } = await axios.post(
-      `${server}/event/create-event`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      }
-    );
-
-    dispatch({ type: "eventCreateSuccess", payload: data.event });
+    dispatch({
+      type: "eventCreateSuccess",
+      payload: data.event,
+    });
   } catch (error) {
-    console.error("Create Event API Error:", error.response?.data || error.message);
     dispatch({
       type: "eventCreateFail",
-      payload: error.response?.data?.message || "Something went wrong!",
+      payload: error?.response?.data?.message || error.message || "Something went wrong",
     });
   }
 };
 
-export const getAllEventsShop = (id) => async (dispatch) => {
-  try {
-    dispatch({ type: "getAlleventsShopRequest" });
-
-    const { data } = await axios.get(`${server}/event/get-all-events/${id}`);
-
-    dispatch({ type: "getAlleventsShopSuccess", payload: data.events });
-  } catch (error) {
-    dispatch({
-      type: "getAlleventsShopFailed",
-      payload: error.response?.data?.message || "Something went wrong!",
-    });
-  }
-};
-
-export const deleteEvent = (id) => async (dispatch) => {
-  try {
-    dispatch({ type: "deleteeventRequest" });
-
-    const { data } = await axios.delete(
-      `${server}/event/delete-shop-event/${id}`,
-      {
-        withCredentials: true,
-      }
-    );
-
-    dispatch({
-      type: "deleteeventSuccess",
-      payload: data.message,
-      meta: { id },
-    });
-  } catch (error) {
-    dispatch({
-      type: "deleteeventFailed",
-      payload: error.response?.data?.message || "Something went wrong!",
-    });
-  }
-};
-
+// GET ALL EVENTS (GLOBAL)
 export const getAllEvents = () => async (dispatch) => {
   try {
-    dispatch({ type: "getAlleventsRequest" });
+    dispatch({ type: "getAllEventsRequest" });
 
     const { data } = await axios.get(`${server}/event/get-all-events`);
 
-    dispatch({ type: "getAlleventsSuccess", payload: data.events });
+    dispatch({
+      type: "getAllEventsSuccess",
+      payload: data.events,
+    });
   } catch (error) {
     dispatch({
-      type: "getAlleventsFailed",
-      payload: error.response?.data?.message || "Something went wrong!",
+      type: "getAllEventsFail",
+      payload: error?.response?.data?.message || error.message,
     });
   }
 };
 
-export const clearErrors = () => (dispatch) => {
-  dispatch({ type: "clearErrors" });
+// GET ALL EVENTS OF A SHOP
+export const getAllEventsShop = (shopId) => async (dispatch) => {
+  try {
+    dispatch({ type: "getAllEventsShopRequest" });
+
+    const { data } = await axios.get(`${server}/event/get-all-events/${shopId}`);
+
+    dispatch({
+      type: "getAllEventsShopSuccess",
+      payload: data.events,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllEventsShopFail",
+      payload: error?.response?.data?.message || error.message,
+    });
+  }
 };
 
-export const clearSuccess = () => (dispatch) => {
-  dispatch({ type: "clearSuccess" });
+// DELETE EVENT
+export const deleteEvent = (eventId) => async (dispatch) => {
+  try {
+    dispatch({ type: "deleteEventRequest" });
+
+    const { data } = await axios.delete(`${server}/event/delete-shop-event/${eventId}`, {
+      withCredentials: true,
+    });
+
+    dispatch({
+      type: "deleteEventSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "deleteEventFail",
+      payload: error?.response?.data?.message || error.message,
+    });
+  }
 };

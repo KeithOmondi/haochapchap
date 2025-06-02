@@ -1,49 +1,135 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import dayjs from "dayjs";
+import { useSelector } from "react-redux";
+import { FaFacebookF, FaTwitter } from "react-icons/fa";
+import { IoShareSocialSharp } from "react-icons/io5";
 
-const EventCard = ({ data }) => {
-  if (!data || !data.images || !data.images[0]) {
-    return <div>Loading...</div>;
-  }
+const EventCard = () => {
+  const { allEvents } = useSelector((state) => state.events);
 
-  const formattedDate = dayjs(data.createdAt).format("MMM D, YYYY");
+  const today = new Date().toLocaleDateString();
 
   return (
-    <div className="flex flex-col bg-white rounded-xl shadow-md mb-10 p-6 transition-all duration-300 hover:shadow-xl">
-      <div className="mb-4">
-        <img
-          src={data.images[0]?.url}
-          alt={data.title}
-          className="w-full h-[250px] object-cover rounded-lg"
-        />
-      </div>
+    <div className="flex flex-row flex-wrap gap-6 p-6 bg-gray-50 overflow-x-auto">
+      {/* 🏠 Properties Card */}
+      <div className="min-w-[320px] max-w-sm bg-white rounded-lg shadow-md p-6 flex flex-col justify-between">
+        {/* Header */}
+        <div className="flex items-center mb-4">
+          <img
+            src="https://i.pravatar.cc/40?img=5"
+            alt="Avatar"
+            className="w-10 h-10 rounded-full mr-3"
+          />
+          <div>
+            <p className="font-semibold text-gray-800">Estate Expert</p>
+            <p className="text-xs text-gray-500">Posted on {today}</p>
+          </div>
+        </div>
 
-      <div className="flex-grow">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-          {data.title}
+        {/* Image */}
+        <img
+          src="https://t4.ftcdn.net/jpg/07/14/26/29/240_F_714262984_mk1w5mPakiybHo4WxyFJsROLumylWgsX.jpg"
+          alt="Properties"
+          className="rounded-md mb-4 h-48 w-full object-cover"
+        />
+
+        {/* Content */}
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          Hot Properties in Your Area
         </h2>
-        <p className="text-gray-600 text-base mb-4">{data.description}</p>
-        <p className="text-sm text-gray-500">
-          Listed by {data.agent?.name || "Agent"} • {formattedDate}
+        <p className="text-gray-600 text-sm mb-4">
+          Discover beautiful homes, affordable apartments, and prime real estate across your city. Our platform helps you connect directly with sellers and agents for faster deals.
         </p>
 
-        <div className="flex justify-between items-center mt-4">
-          <span className="text-xl font-bold text-green-600">
-            {data.price} Ksh
-          </span>
-          <span className="text-sm text-gray-500">{data.location}</span>
-        </div>
+        <button className="bg-green-600 text-white px-4 py-2 rounded-md text-sm mb-4 hover:bg-green-700">
+          Read More
+        </button>
 
-        <div className="mt-6">
-          <Link
-            to={`/property/${data._id}`}
-            className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-700"
-          >
-            View Details
-          </Link>
+        {/* Share Icons */}
+       <div className="flex space-x-4 justify-between text-gray-500 text-lg">
+          <a href="#" title="Facebook"><FaFacebookF /></a>
+          <a href="#" title="Twitter"><FaTwitter /></a>
+          <a href="#" title="Copy link"><IoShareSocialSharp /></a>
         </div>
       </div>
+
+      {/* 📰 Blog Card */}
+      <div className="min-w-[320px] max-w-sm bg-white rounded-lg shadow-md p-6 flex flex-col justify-between">
+        {/* Header */}
+        <div className="flex items-center mb-4">
+          <img
+            src="https://i.pravatar.cc/40?img=8"
+            alt="Avatar"
+            className="w-10 h-10 rounded-full mr-3"
+          />
+          <div>
+            <p className="font-semibold text-gray-800">Realty Blogger</p>
+            <p className="text-xs text-gray-500">Posted on {today}</p>
+          </div>
+        </div>
+
+        {/* Image */}
+        <img
+          src="https://t4.ftcdn.net/jpg/07/14/26/29/240_F_714262984_mk1w5mPakiybHo4WxyFJsROLumylWgsX.jpg"
+          alt="Blog"
+          className="rounded-md mb-4 h-48 w-full object-cover"
+        />
+
+        {/* Content */}
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          5 Tips for First-Time Home Buyers
+        </h2>
+        <p className="text-gray-600 text-sm mb-4">
+          Learn how to plan your purchase, avoid common mistakes, and land the home of your dreams. Our blog provides practical advice based on real-life experiences.
+        </p>
+
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm mb-4 hover:bg-blue-700">
+          Read More
+        </button>
+
+        {/* Share Icons */}
+        <div className="flex space-x-4 justify-between text-gray-500 text-lg">
+          <a href="#" title="Facebook"><FaFacebookF /></a>
+          <a href="#" title="Twitter"><FaTwitter /></a>
+          <a href="#" title="Copy link"><IoShareSocialSharp /></a>
+        </div>
+      </div>
+
+      {/* 📅 Events (Dynamic from Redux) */}
+      {allEvents && allEvents.length > 0 ? (
+        allEvents.map((event) => (
+          <div
+            key={event._id}
+            className="min-w-[320px] max-w-sm rounded-lg shadow-md p-6 flex flex-col justify-between"
+          >
+            {/* Image */}
+            <img
+              src={event.images[0]?.url || "/default-image.jpg"}
+              alt={event.name || "Event"}
+              className="rounded-md mb-4 h-48 w-full object-cover"
+            />
+
+            {/* Content */}
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              {event.name || "Untitled Event"}
+            </h2>
+            <p className="text-gray-600 text-sm mb-3">
+              {event.description || "No description provided."}
+            </p>
+
+            {/* Dates */}
+            <p className="text-sm text-gray-500 mb-4">
+              {new Date(event.startDate).toLocaleDateString()} –{" "}
+              {new Date(event.endDate).toLocaleDateString()}
+            </p>
+
+            <button className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700">
+              Learn More
+            </button>
+          </div>
+        ))
+      ) : (
+        <p className="text-gray-500 text-sm">No events available.</p>
+      )}
     </div>
   );
 };
