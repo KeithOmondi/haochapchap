@@ -1,29 +1,29 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Header from '../components/Layout/Header';
-import Footer from '../components/Layout/Footer';
-import { createBooking, clearBookingState } from '../redux/actions/booking';
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Header from "../components/Layout/Header";
+import Footer from "../components/Layout/Footer";
+import { createBooking, clearBookingState } from "../redux/actions/booking";
 
 // Import Toastify
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AppointmentForm() {
   const dispatch = useDispatch();
-  const { success, error } = useSelector(state => state.booking);
+  const { success, error } = useSelector((state) => state.booking);
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    date: '',
-    time: '',
-    message: '',
+    name: "",
+    email: "",
+    phone: "",
+    date: "",
+    time: "",
+    message: "",
   });
 
   useEffect(() => {
     if (success) {
-      toast.success('Appointment booked successfully!');
+      toast.success("Appointment booked successfully!");
       const timeout = setTimeout(() => dispatch(clearBookingState()), 4000);
       return () => clearTimeout(timeout);
     }
@@ -35,7 +35,7 @@ export default function AppointmentForm() {
   }, [success, error, dispatch]);
 
   const handleChange = (e) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -45,12 +45,12 @@ export default function AppointmentForm() {
     e.preventDefault();
     dispatch(createBooking(formData));
     setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      date: '',
-      time: '',
-      message: '',
+      name: "",
+      email: "",
+      phone: "",
+      date: "",
+      time: "",
+      message: "",
     });
   };
 
@@ -118,9 +118,12 @@ export default function AppointmentForm() {
           />
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+            disabled={loading}
+            className={`w-full bg-blue-600 text-white py-2 rounded transition ${
+              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+            }`}
           >
-            Confirm Booking
+            {loading ? "Booking..." : "Confirm Booking"}
           </button>
         </form>
       </div>

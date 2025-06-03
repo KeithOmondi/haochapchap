@@ -21,15 +21,18 @@ import {
   AppointmentForm,
   WhyUs,
   Careers,
+  BlogPage,
 } from "./routes/Routes";
 
 import {
   SellerActivationPage,
+  ShopAllBlogs,
   ShopAllBookings,
   ShopAllCoupouns,
   ShopAllEvents,
   ShopAllMessages,
   ShopAllProducts,
+  ShopCreateBlog,
   ShopCreateEvents,
   ShopCreateProduct,
   ShopDashboardPage,
@@ -78,6 +81,7 @@ const AppContent = () => {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/appointment" element={<AppointmentForm />} />
         <Route path="/order/success" element={<OrderSuccessPage />} />
+        <Route path="/blogs" element={<BlogPage />} />
         <Route
           path="/activation/:activation_token"
           element={<ActivationPage />}
@@ -169,6 +173,22 @@ const AppContent = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllProducts />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-create-blog"
+          element={
+            <SellerProtectedRoute>
+              <ShopCreateBlog />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-blogs"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllBlogs />
             </SellerProtectedRoute>
           }
         />

@@ -1,4 +1,3 @@
-// reducer:
 import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -13,23 +12,22 @@ export const sellerReducer = createReducer(initialState, (builder) => {
     // Load single seller
     .addCase("LoadSellerRequest", (state) => {
       state.isLoading = true;
-      state.error = null; // Clear any previous errors
+      state.error = null;
     })
     .addCase("LoadSellerSuccess", (state, action) => {
-      console.log("LoadSellerSuccess payload:", action.payload);
-      state.isSeller = true; //  Set isSeller to true
+      state.isSeller = true;
       state.isLoading = false;
-      state.seller = action.payload; // Store the seller data
+      state.seller = action.payload;
       state.error = null;
     })
     .addCase("LoadSellerFail", (state, action) => {
-      console.log("LoadSellerFail payload:", action.payload);
       state.isLoading = false;
       state.error = action.payload;
-      state.isSeller = false; //  Set isSeller to false on failure
+      state.isSeller = false;
       state.seller = null;
     })
-    // Get all sellers (This part is fine, but not directly related to the loading issue)
+
+    // Get all sellers
     .addCase("getAllSellersRequest", (state) => {
       state.isLoading = true;
       state.error = null;
@@ -43,6 +41,7 @@ export const sellerReducer = createReducer(initialState, (builder) => {
       state.isLoading = false;
       state.error = action.payload;
     })
+
     // Utilities
     .addCase("clearErrors", (state) => {
       state.error = null;

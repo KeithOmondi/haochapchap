@@ -19,32 +19,33 @@ const AllBookings = () => {
     {
       field: "bookingDateTime",
       headerName: "Date & Time",
-      minWidth: 180,
-      flex: 1,
+      minWidth: 220,
+      flex: 1.2,
       valueFormatter: (params) => {
-        if (!params || !params.value) return "N/A";
-        const date = new Date(params.value);
-        if (isNaN(date)) return "Invalid Date";
-        return date.toLocaleString(undefined, {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
+        const value = params?.value;
+        if (!value) return "N/A";
+        const date = new Date(value);
+        return isNaN(date)
+          ? "Invalid Date"
+          : date.toLocaleString(undefined, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            });
       },
     },
   ];
 
-  const rows = Array.isArray(bookings)
-    ? bookings.map((booking) => ({
-        id: booking._id,
-        name: booking.name,
-        email: booking.email,
-        phone: booking.phone,
-        bookingDateTime: booking.bookingDateTime,
-      }))
-    : [];
+  const rows = bookings.map((booking) => ({
+    id: booking._id,
+    name: booking.name,
+    email: booking.email,
+    phone: booking.phone,
+    bookingDateTime: booking.bookingDateTime,
+  }));
 
   return (
     <div className="w-full px-8 pt-1 mt-10 bg-white" style={{ minWidth: 650 }}>

@@ -24,6 +24,10 @@ export const navData = [
         url: "/about"
       },
       {
+        title: "Blogs",
+        url: "/blogs"
+      },
+      {
         title: "Careers",
         url: "/career"
       },

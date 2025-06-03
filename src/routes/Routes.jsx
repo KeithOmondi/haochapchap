@@ -17,6 +17,7 @@ import EventsPage from "../pages/EventsPage";
 import AppointmentForm from "../pages/AppointmentForm";
 import WhyUs from "../pages/WhyUs";
 import Careers from "../pages/Careers";
+import BlogPage from "../pages/BlogPage";
 
 export {
     HomePage,
@@ -37,5 +38,6 @@ export {
     EventsPage,
     AppointmentForm,
     WhyUs,
-    Careers
+    Careers,
+    BlogPage
 }

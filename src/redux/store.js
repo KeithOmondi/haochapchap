@@ -7,6 +7,7 @@ import { cartReducer } from './reducers/cart';
 import { wishlistReducer } from './reducers/wishlist';
 import { sellerReducer } from './reducers/seller';
 import { messageReducer } from './reducers/message';
+import { blogReducer } from './reducers/blog';
 
 
 const Store = configureStore({
@@ -19,6 +20,7 @@ const Store = configureStore({
         cart: cartReducer,
         wishlist: wishlistReducer,
         message: messageReducer,
+        blogs: blogReducer, 
     }
 });
 

@@ -1,162 +1,117 @@
 import React from "react";
 import { AiOutlineFolderAdd, AiOutlineGift } from "react-icons/ai";
-import { FiPackage, FiShoppingBag } from "react-icons/fi";
-import { MdOutlineLocalOffer } from "react-icons/md";
+import { FiShoppingBag } from "react-icons/fi";
+import { MdOutlineLocalOffer, MdMessage } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { VscNewFile } from "react-icons/vsc";
 import { CiSettings } from "react-icons/ci";
 import { Link } from "react-router-dom";
-import { MdMessage } from "react-icons/md";
+import { FaWpforms } from "react-icons/fa";
+import { PiNotebookBold } from "react-icons/pi"; // Blog icon
+import { BsPlusSquare } from "react-icons/bs"; // Add blog icon
 
 const DashboardSideBar = ({ active }) => {
   return (
     <div className="w-full h-[90vh] bg-white shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
-      {/* single item */}
-      <div className="w-full flex items-center p-4">
-        <Link to="/dashboard" className="w-full flex items-center">
-          <RxDashboard
-            size={30}
-            color={`${active === 1 ? "crimson" : "#555"}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 1 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            Dashboard
-          </h5>
-        </Link>
-      </div>
+      {/* Dashboard */}
+      <SidebarItem
+        to="/dashboard"
+        icon={<RxDashboard size={30} />}
+        label="Dashboard"
+        isActive={active === 1}
+      />
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-bookings" className="w-full flex items-center">
-          <FiShoppingBag
-            size={30}
-            color={`${active === 2 ? "crimson" : "#555"}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 2 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            All Bookings
-          </h5>
-        </Link>
-      </div>
+      {/* Bookings */}
+      <SidebarItem
+        to="/dashboard-bookings"
+        icon={<FiShoppingBag size={30} />}
+        label="All Bookings"
+        isActive={active === 2}
+      />
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-listings" className="w-full flex items-center">
-          <FiPackage size={30} color={`${active === 3 ? "crimson" : "#555"}`} />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 3 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            All Listings
-          </h5>
-        </Link>
-      </div>
+      {/* Listings */}
+      <SidebarItem
+        to="/dashboard-listings"
+        icon={<FaWpforms size={30} />}
+        label="All Listings"
+        isActive={active === 3}
+      />
+      <SidebarItem
+        to="/dashboard-create-listing"
+        icon={<AiOutlineFolderAdd size={30} />}
+        label="Create Listing"
+        isActive={active === 4}
+      />
 
-      <div className="w-full flex items-center p-4">
-        <Link
-          to="/dashboard-create-listing"
-          className="w-full flex items-center"
-        >
-          <AiOutlineFolderAdd
-            size={30}
-            color={`${active === 4 ? "crimson" : "#555"}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 4 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            Create Listing
-          </h5>
-        </Link>
-      </div>
+      {/* Events */}
+      <SidebarItem
+        to="/dashboard-events"
+        icon={<MdOutlineLocalOffer size={30} />}
+        label="All Events"
+        isActive={active === 5}
+      />
+      <SidebarItem
+        to="/dashboard-create-event"
+        icon={<VscNewFile size={30} />}
+        label="Create Event"
+        isActive={active === 6}
+      />
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-events" className="w-full flex items-center">
-          <MdOutlineLocalOffer
-            size={30}
-            color={`${active === 5 ? "crimson" : "#555"}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 5 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            All Events
-          </h5>
-        </Link>
-      </div>
+      {/* Blogs */}
+      <SidebarItem
+        to="/dashboard-blogs"
+        icon={<PiNotebookBold size={30} />}
+        label="All Blogs"
+        isActive={active === 7}
+      />
+      <SidebarItem
+        to="/dashboard-create-blog"
+        icon={<BsPlusSquare size={30} />}
+        label="Create Blog"
+        isActive={active === 8}
+      />
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-create-event" className="w-full flex items-center">
-          <VscNewFile
-            size={30}
-            color={`${active === 6 ? "crimson" : "#555"}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 6 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            Create Event
-          </h5>
-        </Link>
-      </div>
+      {/* Coupons */}
+      <SidebarItem
+        to="/dashboard-coupouns"
+        icon={<AiOutlineGift size={30} />}
+        label="Discount Codes"
+        isActive={active === 9}
+      />
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-coupouns" className="w-full flex items-center">
-          <AiOutlineGift
-            size={30}
-            color={`${active === 9 ? "crimson" : "#555"}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 9 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            Discount Codes
-          </h5>
-        </Link>
-      </div>
+      {/* Messages */}
+      <SidebarItem
+        to="/dashboard-messages"
+        icon={<MdMessage size={30} />}
+        label="Messages"
+        isActive={active === 10}
+      />
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-messages" className="w-full flex items-center">
-          <MdMessage
-            size={30}
-            color={`${active === 10 ? "crimson" : "#555"}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 10 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            Messages
-          </h5>
-        </Link>
-      </div>
-
-      <div className="w-full flex items-center p-4">
-        <Link to="/settings" className="w-full flex items-center">
-          <CiSettings
-            size={30}
-            color={`${active === 11 ? "crimson" : "#555"}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 11 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            Settings
-          </h5>
-        </Link>
-      </div>
+      {/* Settings */}
+      <SidebarItem
+        to="/settings"
+        icon={<CiSettings size={30} />}
+        label="Settings"
+        isActive={active === 11}
+      />
     </div>
   );
 };
+
+// Reusable Sidebar Item component
+const SidebarItem = ({ to, icon, label, isActive }) => (
+  <div className="w-full flex items-center p-4">
+    <Link to={to} className="w-full flex items-center">
+      {React.cloneElement(icon, { color: isActive ? "crimson" : "#555" })}
+      <h5
+        className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+          isActive ? "text-[crimson]" : "text-[#555]"
+        }`}
+      >
+        {label}
+      </h5>
+    </Link>
+  </div>
+);
 
 export default DashboardSideBar;

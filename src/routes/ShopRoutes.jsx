@@ -11,6 +11,8 @@ import ShopPreviewPage from "../pages/Shop/ShopPreviewPage";
 import ShopHomePage from "../pages/Shop/ShopHomePage";
 import ShopOrderDetails from "../pages/Shop/ShopOrderDetails";
 import ShopAllMessages from "../pages/Shop/ShopAllMessages";
+import ShopCreateBlog from "../pages/Shop/ShopCreateBlog";
+import ShopAllBlogs from "../pages/Shop/ShopAllBlogs";
 
 export {
     ShopDashboardPage,
@@ -25,5 +27,7 @@ export {
     ShopPreviewPage,
     ShopHomePage,
     ShopOrderDetails,
-    ShopAllMessages
+    ShopAllMessages,
+    ShopCreateBlog,
+    ShopAllBlogs
 }
